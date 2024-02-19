@@ -1,0 +1,108 @@
+
+CREATE TABLE task_comments (
+    comment_id SERIAL PRIMARY KEY,
+    comment TEXT NOT NULL,
+    datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    team_member_id INT NOT NULL,
+    task_id INT NOT NULL,
+    CONSTRAINT fk_team_member
+        FOREIGN KEY (team_member_id)
+        REFERENCES team_members (member_id),
+    CONSTRAINT fk_task
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (task_id)
+);
+
+CREATE TABLE task_comments (
+    comment_id SERIAL PRIMARY KEY,
+    comment TEXT NOT NULL,
+    datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    team_member_id INT NOT NULL,
+    task_id INT NOT NULL,
+    CONSTRAINT fk_team_member
+        FOREIGN KEY (team_member_id)
+        REFERENCES team_members (member_id),
+    CONSTRAINT fk_task
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (task_id)
+);
+
+CREATE TABLE tasks (
+    task_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) NOT NULL,
+    priority VARCHAR(50) NOT NULL,
+    assigned_to INT,
+    CONSTRAINT fk_assigned_to
+        FOREIGN KEY (assigned_to)
+        REFERENCES team_members(member_id)
+);
+
+INSERT INTO team_members (name, email, number, username, password, role, status, company)
+VALUES
+    ('John Doe', 'john.doe@example.com', '1234567890', 'john_doe', 'password123', 'Developer', 'Active', 'Company A'),
+    ('Jane Doe', 'jane.doe@example.com', '9876543210', 'jane_doe', 'password456', 'Designer', 'Active', 'Company B'),
+    ('Alice Smith', 'alice.smith@example.com', '5551234567', 'alice_smith', 'password789', 'Manager', 'Active', 'Company A'),
+    ('Bob Johnson', 'bob.johnson@example.com', '9876543210', 'bob_johnson', 'passwordabc', 'Developer', 'Active', 'Company B'),
+    ('Emily Davis', 'emily.davis@example.com', '4441234567', 'emily_davis', 'passworddef', 'Designer', 'Active', 'Company A'),
+    ('Michael Wilson', 'michael.wilson@example.com', '9876543210', 'michael_wilson', 'passwordghi', 'Manager', 'Active', 'Company B'),
+    ('Sarah Brown', 'sarah.brown@example.com', '6661234567', 'sarah_brown', 'passwordjkl', 'Developer', 'Active', 'Company A'),
+    ('David Martinez', 'david.martinez@example.com', '9876543210', 'david_martinez', 'passwordmno', 'Designer', 'Active', 'Company B'),
+    ('Olivia Garcia', 'olivia.garcia@example.com', '7771234567', 'olivia_garcia', 'passwordpqr', 'Manager', 'Active', 'Company A'),
+    ('James Rodriguez', 'james.rodriguez@example.com', '9876543210', 'james_rodriguez', 'passwordstu', 'Developer', 'Active', 'Company B'),
+    ('Sophia Hernandez', 'sophia.hernandez@example.com', '8881234567', 'sophia_hernandez', 'passwordvwx', 'Designer', 'Active', 'Company A'),
+    ('William Lopez', 'william.lopez@example.com', '9876543210', 'william_lopez', 'passwordyz', 'Manager', 'Active', 'Company B'),
+    ('Isabella Martinez', 'isabella.martinez@example.com', '9991234567', 'isabella_martinez', 'password123', 'Developer', 'Active', 'Company A'),
+    ('Ethan Adams', 'ethan.adams@example.com', '9876543210', 'ethan_adams', 'password456', 'Designer', 'Active', 'Company B'),
+    ('Mia King', 'mia.king@example.com', '1111234567', 'mia_king', 'password789', 'Manager', 'Active', 'Company A');
+
+CREATE TABLE team_members (
+    member_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    number VARCHAR(20),
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50),
+    status VARCHAR(50) CHECK (status IN ('Active', 'Banned')),
+    company VARCHAR(255)
+);
+
+-- Insert dummy data into tasks table
+INSERT INTO tasks (title, description, status, priority, assigned_to)
+VALUES
+    ('Task 1', 'Description for Task 1', 'Pending', 'High', 1),
+    ('Task 2', 'Description for Task 2', 'In Progress', 'Medium', 2),
+    ('Task 3', 'Description for Task 3', 'Completed', 'Low', 3),
+    ('Task 4', 'Description for Task 4', 'Pending', 'High', 4),
+    ('Task 5', 'Description for Task 5', 'In Progress', 'Medium', 5),
+    ('Task 6', 'Description for Task 6', 'Completed', 'Low', 6),
+    ('Task 7', 'Description for Task 7', 'Pending', 'High', 7),
+    ('Task 8', 'Description for Task 8', 'In Progress', 'Medium', 8),
+    ('Task 9', 'Description for Task 9', 'Completed', 'Low', 9),
+    ('Task 10', 'Description for Task 10', 'Pending', 'High', 10),
+    ('Task 11', 'Description for Task 11', 'In Progress', 'Medium', 11),
+    ('Task 12', 'Description for Task 12', 'Completed', 'Low', 12),
+    ('Task 13', 'Description for Task 13', 'Pending', 'High', 13),
+    ('Task 14', 'Description for Task 14', 'In Progress', 'Medium', 14),
+    ('Task 15', 'Description for Task 15', 'Completed', 'Low', 15);
+
+-- Insert dummy data into task_comments table
+INSERT INTO task_comments (comment, datetime, team_member_id, task_id)
+VALUES
+    ('Comment 1 for Task 1', NOW(), 1, 1),
+    ('Comment 2 for Task 1', NOW(), 2, 1),
+    ('Comment 1 for Task 2', NOW(), 3, 2),
+    ('Comment 2 for Task 2', NOW(), 4, 2),
+    ('Comment 1 for Task 3', NOW(), 5, 3),
+    ('Comment 2 for Task 3', NOW(), 6, 3),
+    ('Comment 1 for Task 4', NOW(), 7, 4),
+    ('Comment 2 for Task 4', NOW(), 8, 4),
+    ('Comment 1 for Task 5', NOW(), 9, 5),
+    ('Comment 2 for Task 5', NOW(), 10, 5),
+    ('Comment 1 for Task 6', NOW(), 11, 6),
+    ('Comment 2 for Task 6', NOW(), 12, 6),
+    ('Comment 1 for Task 7', NOW(), 13, 7),
+    ('Comment 2 for Task 7', NOW(), 14, 7),
+    ('Comment 1 for Task 8', NOW(), 15, 8);
