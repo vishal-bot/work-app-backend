@@ -9,6 +9,10 @@ const pool = new Pool({
   port: 5432,
 });
 
+// const pool = new Pool({
+//   connectionString: 'postgres://cprldniw:q4o3GM_bjL1smKQlx3WqDwStvafsYoAE@lallah.db.elephantsql.com/cprldniw',
+// });
+
 // Test the database connection
 pool.connect((err, client, done) => {
     if (err) {
