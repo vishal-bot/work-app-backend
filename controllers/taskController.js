@@ -47,11 +47,11 @@ exports.addTask = async (req, res) => {
   // Get newly added tasks
   exports.getNewTask = async (req, res) => {
     try {
-      const task = await TaskService.getNewTasks(taskId);
+      const task = await TaskService.getNewTasks();
       if (task.rows.length === 0) {
         return res.status(404).json({ message: 'Task not found' });
       }
-      res.json(task.rows[0]);
+      res.json(task);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

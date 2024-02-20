@@ -7,7 +7,7 @@ router.get('/', TaskController.getAllTasks);
 
 router.get('/new', TaskController.getNewTask);
 // Define other routes for task-related endpoints
-router.get('/:taskId', TaskController.getTask);
+router.get('id/:taskId', TaskController.getTask);
 
 router.post('/', TaskController.addTask);
 
