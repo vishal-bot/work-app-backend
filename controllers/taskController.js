@@ -32,8 +32,8 @@ exports.addTask = async (req, res) => {
     try {
       const { taskId } = req.params;
       console.log(taskId);
-      const task = await TaskService.getTask(taskId);
-    //   const task = await pool.query('SELECT * FROM tasks WHERE task_id = $1', [taskId]);
+      // const task = await TaskService.getTask(taskId);
+      const task = await pool.query('SELECT * FROM tasks WHERE task_id = $1', [taskId]);
       if (task.rows.length === 0) {
         return res.status(404).json({ message: 'Task not found' });
       }
