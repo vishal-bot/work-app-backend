@@ -19,7 +19,7 @@ class TaskModel {
   }
 
   static async getNewTask(){
-    const query = 'SELECT * FROM tasks ORDER BY task_id DESC limit 4';
+    const query = 'SELECT * FROM tasks ORDER BY task_id DESC';
     const { rows } = await pool.query(query);
     return rows;
   }
