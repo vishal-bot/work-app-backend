@@ -8,11 +8,11 @@ class TaskModel {
     return rows;
   }
 
-  static async getTask(taskId) {
-      const query = 'SELECT * FROM tasks WHERE task_id = $1', [taskId];
-      const { rows } = await pool.query(query);
-      return rows;
-  }
+  // static async getTask(taskId) {
+  //     const query = 'SELECT * FROM tasks WHERE task_id = $1', [taskId];
+  //     const { rows } = await pool.query(query);
+  //     return rows;
+  // }
 
   static async getNewTask(){
     const query = 'SELECT * FROM tasks ORDER BY task_id DESC limit 4';
