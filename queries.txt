@@ -31,7 +31,7 @@ CREATE TABLE tasks (
     task_id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
-    status VARCHAR(50) NOT NULL,
+    status VARCHAR(50) CHECK (status IN ('Active', 'InActive','Completed')),
     priority VARCHAR(50) NOT NULL,
     assigned_to INT,
     CONSTRAINT fk_assigned_to
@@ -72,20 +72,20 @@ CREATE TABLE team_members (
 -- Insert dummy data into tasks table
 INSERT INTO tasks (title, description, status, priority, assigned_to)
 VALUES
-    ('Task 1', 'Description for Task 1', 'Pending', 'High', 1),
-    ('Task 2', 'Description for Task 2', 'In Progress', 'Medium', 2),
+    ('Task 1', 'Description for Task 1', 'Active', 'High', 1),
+    ('Task 2', 'Description for Task 2', 'InActive', 'Medium', 2),
     ('Task 3', 'Description for Task 3', 'Completed', 'Low', 3),
-    ('Task 4', 'Description for Task 4', 'Pending', 'High', 4),
-    ('Task 5', 'Description for Task 5', 'In Progress', 'Medium', 5),
+    ('Task 4', 'Description for Task 4', 'Active', 'High', 4),
+    ('Task 5', 'Description for Task 5', 'InActive', 'Medium', 5),
     ('Task 6', 'Description for Task 6', 'Completed', 'Low', 6),
-    ('Task 7', 'Description for Task 7', 'Pending', 'High', 7),
-    ('Task 8', 'Description for Task 8', 'In Progress', 'Medium', 8),
+    ('Task 7', 'Description for Task 7', 'Active', 'High', 7),
+    ('Task 8', 'Description for Task 8', 'InActive', 'Medium', 8),
     ('Task 9', 'Description for Task 9', 'Completed', 'Low', 9),
-    ('Task 10', 'Description for Task 10', 'Pending', 'High', 10),
-    ('Task 11', 'Description for Task 11', 'In Progress', 'Medium', 11),
+    ('Task 10', 'Description for Task 10', 'Active', 'High', 10),
+    ('Task 11', 'Description for Task 11', 'InActive', 'Medium', 11),
     ('Task 12', 'Description for Task 12', 'Completed', 'Low', 12),
-    ('Task 13', 'Description for Task 13', 'Pending', 'High', 13),
-    ('Task 14', 'Description for Task 14', 'In Progress', 'Medium', 14),
+    ('Task 13', 'Description for Task 13', 'Active', 'High', 13),
+    ('Task 14', 'Description for Task 14', 'InActive', 'Medium', 14),
     ('Task 15', 'Description for Task 15', 'Completed', 'Low', 15);
 
 -- Insert dummy data into task_comments table

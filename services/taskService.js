@@ -10,6 +10,9 @@ class TaskService {
     return await TaskModel.getTasks();
   }
 
+  static async getNewTask(){
+    return await TaskModel.getNewTask();
+  }
   // Other service methods for task-related business logic
 }
 

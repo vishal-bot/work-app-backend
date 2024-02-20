@@ -4,6 +4,8 @@ const router = express.Router();
 const TaskController = require('../controllers/taskController');
 
 router.get('/', TaskController.getAllTasks);
+
+router.get('/new', TaskController.getNewTask);
 // Define other routes for task-related endpoints
 router.get('/:taskId', TaskController.getTask);
 
