@@ -21,9 +21,10 @@ app.use(
 app.options('*', cors());
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/tasks', taskRoutes);
+app.use('/api/tasks', taskRoutes);
+// app.use('/new', taskRoutes);
 // Define other routes for different resources
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/register', authRoutes);
 
 

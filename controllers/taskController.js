@@ -1,4 +1,5 @@
 // controllers/taskController.js
+const pool = require('../config/config');
 const TaskService = require('../services/taskService');
 
 exports.getAllTasks = async (req, res) => {
@@ -28,16 +29,12 @@ exports.addTask = async (req, res) => {
   };
   
   // Get task by ID
-  exports.getTask = async (req, res) => {
+  exports.getTask = async (req, res, next) => {
+    const { taskId } = req.params;
+      // console.log(taskId);
     try {
-      const { taskId } = req.params;
-      console.log(taskId);
-      // const task = await TaskService.getTask(taskId);
-      const task = await pool.query('SELECT * FROM tasks WHERE task_id = $1', [taskId]);
-      if (task.rows.length === 0) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
-      res.json(task.rows[0]);
+      const task = await TaskService.getTask(taskId);
+      res.json(task);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -47,10 +44,10 @@ exports.addTask = async (req, res) => {
   // Get newly added tasks
   exports.getNewTask = async (req, res) => {
     try {
-      const task = await TaskService.getNewTasks();
-      if (task.rows.length === 0) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
+      const task = await TaskService.getNewTask();
+      // if (task.rows.length === 0) {
+      //   return res.status(404).json({ message: 'Task not found' });
+      // }
       res.json(task);
     } catch (err) {
       console.error(err.message);

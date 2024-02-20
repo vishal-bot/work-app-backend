@@ -3,8 +3,8 @@ const AuthService = require('../services/authService');
 
 exports.login = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const token = await AuthService.login(email, password);
+        const { username, password } = req.body;
+        const token = await AuthService.login(username, password);
         res.json({ token });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
@@ -14,8 +14,8 @@ exports.login = async (req, res) => {
 // Other controller methods for registration, logout, etc.
 exports.register = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        await AuthService.register(email, password);
+        const { username, password } = req.body;
+        await AuthService.register(username, password);
         res.status(201).json({ message: 'Registration successful' });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
