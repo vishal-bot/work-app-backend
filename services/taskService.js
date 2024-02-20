@@ -6,8 +6,8 @@ class TaskService {
     return await TaskModel.getAllTasks();
   }
 
-  static async getTasks() {
-    return await TaskModel.getTasks();
+  static async getTask() {
+    return await TaskModel.getTask();
   }
 
   static async getNewTask(){
