@@ -2,8 +2,8 @@
 const pool = require('../config/config');
 
 class UserModel {
-  static async findByEmail(username) {
-    const query = 'SELECT * FROM users WHERE username = $1';
+  static async findByUsername(username) {
+    const query = 'SELECT * FROM team_members WHERE username = $1';
     const { rows } = await pool.query(query, [username]);
     return rows[0];
   }
