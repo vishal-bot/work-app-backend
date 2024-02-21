@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const taskRoutes = require('./routes/taskRoutes');
 const authRoutes = require('./routes/authRoutes');
+const teamRoutes = require('./routes/teamRoutes');
 const cors = require('cors');
 
 const app = express();
