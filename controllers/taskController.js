@@ -16,10 +16,10 @@ exports.getAllTasks = async (req, res) => {
 // Create task
 exports.addTask = async (req, res) => {
     try {
-      const { title, description, status, priority, assignedTo } = req.body;
+      const { title, description, status, priority, assigned_to } = req.body;
       const newTask = await pool.query(
         'INSERT INTO tasks (title, description, status, priority, assigned_to) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [title, description, status, priority, assignedTo]
+        [title, description, status, priority, assigned_to]
       );
       res.status(201).json(newTask.rows[0]);
     } catch (err) {
