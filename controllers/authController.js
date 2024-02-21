@@ -4,9 +4,10 @@ const AuthService = require('../services/authService');
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
-        const token = await AuthService.login(username, password);
-        res.json({ token });
+        const user = await AuthService.login(username, password);
+        res.json(user);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
