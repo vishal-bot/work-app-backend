@@ -59,10 +59,10 @@ exports.addTask = async (req, res) => {
   exports.updatedTask = async (req, res) => {
     try {
       const { taskId } = req.params;
-      const { title, description, status, priority, assignedTo } = req.body;
+      const { title, description, status, priority, assigned_to } = req.body;
       const updatedTask = await pool.query(
         'UPDATE tasks SET title = $1, description = $2, status = $3, priority = $4, assigned_to = $5 WHERE task_id = $6 RETURNING *',
-        [title, description, status, priority, assignedTo, taskId]
+        [title, description, status, priority, assigned_to, taskId]
       );
       if (updatedTask.rows.length === 0) {
         return res.status(404).json({ message: 'Task not found' });

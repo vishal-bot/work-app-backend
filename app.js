@@ -26,7 +26,7 @@ app.use('/api/tasks', taskRoutes);
 // Define other routes for different resources
 app.use('/api/auth', authRoutes);
 // app.use('/register', authRoutes);
-
+app.use('/api/team', teamRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
