@@ -28,3 +28,10 @@ exports.logout = async (req, res) => {
     // Implement logout logic (e.g., invalidate JWT token)
     res.json({ message: 'Logout successful' });
 };
+
+exports.verify = async (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+    const user = await AuthService.verifyToken(token);
+    res.json(user);
+};

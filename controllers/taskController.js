@@ -1,5 +1,6 @@
 // controllers/taskController.js
 const pool = require('../config/config');
+const TaskModel = require('../models/taskModel');
 const TaskService = require('../services/taskService');
 
 exports.getAllTasks = async (req, res) => {
@@ -16,12 +17,9 @@ exports.getAllTasks = async (req, res) => {
 // Create task
 exports.addTask = async (req, res) => {
     try {
-      const { title, description, status, priority, assigned_to } = req.body;
-      const newTask = await pool.query(
-        'INSERT INTO tasks (title, description, status, priority, assigned_to) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [title, description, status, priority, assigned_to]
-      );
-      res.status(201).json(newTask.rows[0]);
+      const { task_title, task_desc, stage, status, priority, assigned_to, project_id } = req.body;
+      const newTask = await TaskModel.createTask(task_title, task_desc, stage, status, priority, assigned_to, project_id);
+      res.json(newTask);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -59,15 +57,9 @@ exports.addTask = async (req, res) => {
   exports.updatedTask = async (req, res) => {
     try {
       const { taskId } = req.params;
-      const { title, description, status, priority, assigned_to } = req.body;
-      const updatedTask = await pool.query(
-        'UPDATE tasks SET title = $1, description = $2, status = $3, priority = $4, assigned_to = $5 WHERE task_id = $6 RETURNING *',
-        [title, description, status, priority, assigned_to, taskId]
-      );
-      if (updatedTask.rows.length === 0) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
-      res.json(updatedTask.rows[0]);
+      const { task_title, task_desc, stage, status, priority, assigned_to } = req.body;
+      const updatedTask = await TaskModel.updateTask(task_title, task_desc, stage, status, priority, assigned_to, taskId);
+      res.json(updatedTask);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -82,6 +74,8 @@ exports.addTask = async (req, res) => {
       if (deletedTask.rows.length === 0) {
         return res.status(404).json({ message: 'Task not found' });
       }
+      // const { selectedTask } = req.params;
+      // const deletedTask = await TaskModel.deleteTask(selectedTask);
       res.json({ message: 'Task deleted successfully' });
     } catch (err) {
       console.error(err.message);

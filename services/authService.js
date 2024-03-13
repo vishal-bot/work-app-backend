@@ -51,6 +51,8 @@ exports.login = async (username, password) => {
 exports.verifyToken = (token) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded.user;
+    next();
     return decoded;
   } catch (error) {
     throw new Error('Invalid token');
