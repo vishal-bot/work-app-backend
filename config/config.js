@@ -1,11 +1,19 @@
 // config/config.js
 const { Pool } = require('pg');
 
+// const pool = new Pool({
+//   user: 'cprldniw',
+//   host: 'lallah.db.elephantsql.com',
+//   database: 'cprldniw',
+//   password: 'q4o3GM_bjL1smKQlx3WqDwStvafsYoAE',
+//   port: 5432,
+// });
+
 const pool = new Pool({
-  user: 'cprldniw',
-  host: 'lallah.db.elephantsql.com',
-  database: 'cprldniw',
-  password: 'q4o3GM_bjL1smKQlx3WqDwStvafsYoAE',
+  user: 'webuser1',
+  host: 'localhost',
+  database: 'work-app',
+  password: 'postgres',
   port: 5432,
 });
 

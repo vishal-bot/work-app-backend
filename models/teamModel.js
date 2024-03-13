@@ -8,6 +8,18 @@ class TeamModel {
     return rows;
   }
 
+  static async getMember(memberId) {
+    const query = 'SELECT * FROM "public"."team_members" WHERE member_id = $1';
+    const { rows } = await pool.query(query, [memberId]);
+    return rows[0];
+  }
+
+  static async getMembersByTeam(teamId) {
+    const query = 'SELECT * FROM "public"."team_members" WHERE team_id = $1';
+    const { rows } = await pool.query(query, [teamId]);
+    return rows[0];
+  }
+
 }
 
 module.exports = TeamModel;

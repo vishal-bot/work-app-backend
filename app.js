@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const taskRoutes = require('./routes/taskRoutes');
 const authRoutes = require('./routes/authRoutes');
 const teamRoutes = require('./routes/teamRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 const cors = require('cors');
 
 const app = express();
@@ -28,6 +29,9 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/auth', authRoutes);
 // app.use('/register', authRoutes);
 app.use('/api/team', teamRoutes);
+
+app.use('/api/project', projectRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
