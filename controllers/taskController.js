@@ -12,6 +12,18 @@ exports.getAllTasks = async (req, res) => {
   }
 };
 
+
+
+exports.getTasksByTeam = async (req, res) => {
+  const { teamId } = req.params;
+  try {
+    const tasks = await TaskService.getTasksByTeam(teamId);
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 // Other controller methods for CRUD operations
 // Routes for CRUD operations on tasks
 // Create task
@@ -65,6 +77,19 @@ exports.addTask = async (req, res) => {
       res.status(500).send('Server Error');
     }
   };
+
+    // Update task by ID
+    exports.updateStage = async (req, res) => {
+      try {
+        const { taskId } = req.params;
+        const { task_title, task_desc, stage, status, priority, assigned_to } = req.body;
+        const updateStage = await TaskModel.updateStage(task_title, task_desc, stage, status, priority, assigned_to, taskId);
+        res.json(updateStage);
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+      }
+    };
   
   // Delete task by ID
   exports.deletedTask = async (req, res) => {
@@ -77,6 +102,30 @@ exports.addTask = async (req, res) => {
       // const { selectedTask } = req.params;
       // const deletedTask = await TaskModel.deleteTask(selectedTask);
       res.json({ message: 'Task deleted successfully' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  };
+
+  exports.addTaskCmnt = async (req, res) => {
+    try {
+      const { task_id, member_id, member_name, comment_text } = req.body;
+      const newTask = await TaskModel.createTaskCmnt(task_id, member_id, member_name, comment_text);
+      res.json(newTask);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  };
+  
+  // Get task by ID
+  exports.getTaskCmnt = async (req, res, next) => {
+    const { taskId } = req.params;
+      // console.log(taskId);
+    try {
+      const task = await TaskModel.getTaskCmnt(taskId);
+      res.json(task);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

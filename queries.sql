@@ -130,3 +130,55 @@ VALUES
     (8, 2, 'This is a comment on task 8 by member 2.'),
     (9, 3, 'This is a comment on task 9 by member 3.'),
     (10, 1, 'This is a comment on task 10 by member 1.');
+
+
+
+CREATE TABLE task_mapper (
+	mapper_id serial Primary key,
+    task_id Int not null,
+	member_id int not null,
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id),
+	FOREIGN KEY (member_id) REFERENCES team_members(member_id)
+);
+
+Insert into task_mapper (task_id, member_id) 
+values 
+(1 , 1),
+(1 , 2),
+(1 , 3),
+(1 , 4),
+(3 , 3),
+(3 , 5),
+(4 , 1),
+(4 , 4);
+
+select * from task_mapper;
+select * from tasks
+truncate table task_mapper
+
+select tasks.task_title, team_members.name 
+from tasks join task_mapper 
+on tasks.task_id = task_mapper.task_id 
+join team_members 
+on team_members.member_id = task_mapper.member_id 
+where task_mapper.member_id = 5;
+
+select * from tasks order by row_number() desc;
+
+-- Create Comments table
+CREATE TABLE Comments (
+    comment_id SERIAL PRIMARY KEY,
+    task_id INT NOT NULL,
+    member_id INT NOT NULL,
+	member_name TEXT NOT NULL,
+    comment_text TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO Comments (task_id, member_id, member_name, comment_text)
+VALUES 
+    (1, 1, 'Vishal Singh', 'This is a comment on task 1 by member 1.');
+
+
+select * from comments where task_id = 1;
+select * from team_members;

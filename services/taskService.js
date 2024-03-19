@@ -6,6 +6,10 @@ class TaskService {
     return await TaskModel.getAllTasks();
   }
 
+  static async getTasksByTeam(teamId){
+    return await TaskModel.getTasksByTeam(teamId);
+  }
+
   static async getTask(taskId) {
     return await TaskModel.getTask(taskId);
   }

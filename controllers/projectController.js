@@ -11,6 +11,16 @@ exports.getAllProjects = async (req, res) => {
   }
 };
 
+exports.getProjectByTeam = async (req, res) => {
+  const { teamId } = req.params;
+  try {
+    const projects = await ProjectModel.getProjectByTeam(teamId);
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 exports.getProject = async (req, res, next) => {
   const { projectId } = req.params;
   try {

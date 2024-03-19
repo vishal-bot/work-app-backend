@@ -7,6 +7,9 @@ class TeamService {
   }
 
   // Other service methods for task-related business logic
+  static async getMembersByTeam(teamId) {
+    return await TeamModel.getMembersByTeam(teamId);
+  }
 }
 
 module.exports = TeamService;

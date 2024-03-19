@@ -17,7 +17,7 @@ class TeamModel {
   static async getMembersByTeam(teamId) {
     const query = 'SELECT * FROM "public"."team_members" WHERE team_id = $1';
     const { rows } = await pool.query(query, [teamId]);
-    return rows[0];
+    return rows;
   }
 
 }

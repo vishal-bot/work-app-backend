@@ -7,6 +7,12 @@ class ProjectModel {
     const { rows } = await pool.query(query);
     return rows;
   }
+  
+  static async getProjectByTeam(teamId) {
+    const query = 'SELECT * FROM projects WHERE team_id = $1';
+    const { rows } = await pool.query(query, [teamId]);
+    return rows;
+  }
 
   static async getProject(projectId) {
     try {

@@ -15,8 +15,8 @@ exports.getAllMembers = async (req, res) => {
 exports.getMembersByTeam = async (req, res) => {
   const { teamId } = req.params;
   try {
-      const team = await TeamModel.getMembersByTeam(teamId);
-      res.json(team);
+      const team1 = await TeamService.getMembersByTeam(teamId);
+      res.json(team1);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }
