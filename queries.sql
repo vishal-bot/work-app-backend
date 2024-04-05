@@ -182,3 +182,24 @@ VALUES
 
 select * from comments where task_id = 1;
 select * from team_members;
+
+
+CREATE TABLE userupdates (
+    update_id SERIAL PRIMARY KEY,
+    task_id INT NOT NULL,
+    member_id INT NOT NULL,
+	member_name TEXT NOT NULL,
+    comment_text TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+with cte as
+(SELECT t.*,
+       string_agg(comment_text, ', ')
+           OVER (partition by member_name ORDER BY member_id) AS aggregated_comments,
+ 		   row_number() over(partition by member_name order by timestamp desc) as rnk
+FROM comments t)
+select cte.*    from cte where rnk = 1;
+
+
+Delete  from comments where comment_id = 1;
