@@ -34,7 +34,13 @@ VALUES ('John Doe', 'john.doe@example.com', '9876543210', 'johndoe', 'hashed_pas
        ('Bob Brown', 'bob.brown@example.com', '9876543213', 'bobbrown', 'hashed_password_4', 'Tester', 'Inactive', 'Company B', 2),
        ('Charlie Davis', 'charlie.davis@example.com', '9876543214', 'charliedavis', 'hashed_password_5', 'Designer', 'Active', 'Company C', 3);
 
-
+-- Insert sample data into Team_Members table
+INSERT INTO Team_Members (name, email, number, username, password, role, status, company, team_id)
+VALUES ('Vishal Singh', 'john.doe@example.com', '9876543210', 'Vishalsingh', 'hashed_password_1', 'Developer', 'Active', 'Company A', 1),
+       ('Pratik Oberoi', 'jane.smith@example.com', '9876543211', 'pratikoberoi', 'hashed_password_2', 'Manager', 'Active', 'Company A', 1),
+       ('Poonam Patil', 'alice.johnson@example.com', '9876543212', 'poonampatil', 'hashed_password_3', 'Developer', 'Active', 'Company B', 1),
+       ('Mahesh Yadav', 'bob.brown@example.com', '9876543213', 'maheshyadav', 'hashed_password_4', 'Tester', 'Inactive', 'Company B', 1),
+       ('Reema Koli', 'charlie.davis@example.com', '9876543214', 'reemakoil', 'hashed_password_5', 'Designer', 'Active', 'Company C', 1);
 
 
 
@@ -106,30 +112,30 @@ VALUES
 
 
 
--- Create Comments table
-CREATE TABLE Comments (
-    comment_id SERIAL PRIMARY KEY,
-    task_id INT NOT NULL,
-    member_id INT NOT NULL,
-    comment_text TEXT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (task_id) REFERENCES Tasks(task_id),
-    FOREIGN KEY (member_id) REFERENCES Team_Members(member_id)
-);
+-- -- Create Comments table
+-- CREATE TABLE Comments (
+--     comment_id SERIAL PRIMARY KEY,
+--     task_id INT NOT NULL,
+--     member_id INT NOT NULL,
+--     comment_text TEXT,
+--     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (task_id) REFERENCES Tasks(task_id),
+--     FOREIGN KEY (member_id) REFERENCES Team_Members(member_id)
+-- );
 
--- Insert dummy data into Comments table
-INSERT INTO Comments (task_id, member_id, comment_text)
-VALUES 
-    (1, 1, 'This is a comment on task 1 by member 1.'),
-    (2, 2, 'This is a comment on task 2 by member 2.'),
-    (3, 3, 'This is a comment on task 3 by member 3.'),
-    (4, 1, 'This is a comment on task 4 by member 1.'),
-    (5, 2, 'This is a comment on task 5 by member 2.'),
-    (6, 3, 'This is a comment on task 6 by member 3.'),
-    (7, 1, 'This is a comment on task 7 by member 1.'),
-    (8, 2, 'This is a comment on task 8 by member 2.'),
-    (9, 3, 'This is a comment on task 9 by member 3.'),
-    (10, 1, 'This is a comment on task 10 by member 1.');
+-- -- Insert dummy data into Comments table
+-- INSERT INTO Comments (task_id, member_id, comment_text)
+-- VALUES 
+--     (1, 1, 'This is a comment on task 1 by member 1.'),
+--     (2, 2, 'This is a comment on task 2 by member 2.'),
+--     (3, 3, 'This is a comment on task 3 by member 3.'),
+--     (4, 1, 'This is a comment on task 4 by member 1.'),
+--     (5, 2, 'This is a comment on task 5 by member 2.'),
+--     (6, 3, 'This is a comment on task 6 by member 3.'),
+--     (7, 1, 'This is a comment on task 7 by member 1.'),
+--     (8, 2, 'This is a comment on task 8 by member 2.'),
+--     (9, 3, 'This is a comment on task 9 by member 3.'),
+--     (10, 1, 'This is a comment on task 10 by member 1.');
 
 
 
@@ -184,15 +190,6 @@ select * from comments where task_id = 1;
 select * from team_members;
 
 
-CREATE TABLE userupdates (
-    update_id SERIAL PRIMARY KEY,
-    task_id INT NOT NULL,
-    member_id INT NOT NULL,
-	member_name TEXT NOT NULL,
-    comment_text TEXT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 with cte as
 (SELECT t.*,
        string_agg(comment_text, ', ')
@@ -203,3 +200,113 @@ select cte.*    from cte where rnk = 1;
 
 
 Delete  from comments where comment_id = 1;
+
+drop table comments;
+ALTER TABLE tasks
+ADD created_by INT;
+
+select * from tasks;
+
+select * from tasks where assigned_to in (2::text) or created_by = 2;
+
+SELECT tasks.* FROM tasks JOIN projects ON tasks.project_id = projects.project_id WHERE projects.team_id = 1 AND (tasks.assigned_to IN (1::text) OR tasks.created_by = 1) ORDER BY tasks.task_id DESC;
+
+
+-- Create Tasks Updates table
+CREATE TABLE tasks_updates (
+    update_id SERIAL PRIMARY KEY,
+    task_id INT,
+    task_title VARCHAR(255) NOT NULL,
+	task_desc text,
+	status VARCHAR(50),
+	member_id int,
+	update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
+);
+
+drop table tasks_updates;
+
+-- Create Trigger function
+CREATE OR REPLACE FUNCTION log_task_updates()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO tasks_updates (task_id, task_title, task_desc, status, member_id)
+        VALUES (NEW.task_id, NEW.task_title, NEW.task_desc, 'Created tasks', new.created_by);
+    ELSIF TG_OP = 'UPDATE' THEN
+        IF OLD.task_title <> NEW.task_title OR OLD.task_desc <> NEW.task_desc OR OLD.status <> NEW.status THEN
+            INSERT INTO tasks_updates (task_id, task_title, task_desc, status, member_id)
+            VALUES (NEW.task_id, NEW.task_title, NEW.task_desc, 'Updated tasks', old.created_by);
+        END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create Trigger on Tasks table
+CREATE TRIGGER tasks_update_trigger
+AFTER INSERT OR UPDATE ON Tasks
+FOR EACH ROW
+EXECUTE FUNCTION log_task_updates();
+
+select * from tasks_updates;
+
+-- Drop the trigger
+DROP TRIGGER IF EXISTS tasks_update_trigger ON Tasks;
+
+-- Drop the trigger function
+DROP FUNCTION IF EXISTS log_task_updates();
+
+
+-- Create Comments table
+CREATE TABLE Comments (
+    comment_id SERIAL PRIMARY KEY,
+    task_id INT NOT NULL,
+    member_id INT NOT NULL,
+    member_name TEXT NOT NULL,
+    comment_text TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create update_comments table
+CREATE TABLE update_comments (
+    update_id SERIAL PRIMARY KEY,
+    comment_id INT,
+    task_id INT,
+    member_id INT,
+    member_name TEXT,
+    comment_text TEXT,
+    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Trigger function
+CREATE OR REPLACE FUNCTION log_comment_updates()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO update_comments (comment_id, task_id, member_id, member_name, comment_text)
+        VALUES (NEW.comment_id, NEW.task_id, NEW.member_id, NEW.member_name, NEW.comment_text);
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO update_comments (comment_id, task_id, member_id, member_name, comment_text )
+        VALUES (NEW.comment_id, NEW.task_id, NEW.member_id, NEW.member_name, NEW.comment_text);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create Trigger on Comments table
+CREATE TRIGGER comments_update_trigger
+AFTER INSERT OR UPDATE ON Comments
+FOR EACH ROW
+EXECUTE FUNCTION log_comment_updates();
+
+
+select * from update_comments;
+select * from tasks_updates;
+
+Select t.update_id, t.task_title, t.task_desc, t.status, t.update_date from tasks_updates t where Date(update_date) = '2024-04-07' AND member_id = 1;
+
+Select c.update_id, t.task_title, c.comment_text, c.update_date from tasks t join update_comments c on t.task_id = c.task_id where Date(c.update_date) = '2024-04-07' AND c.member_id = '1';
+
+
+select * from team_members

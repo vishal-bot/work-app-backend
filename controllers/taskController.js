@@ -24,13 +24,23 @@ exports.getTasksByTeam = async (req, res) => {
   }
 };
 
+exports.getTasksByUser = async (req, res) => {
+  const { teamId, userId } = req.params;
+  try {
+    const tasks = await TaskModel.getTasksByUser(teamId, userId);
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 // Other controller methods for CRUD operations
 // Routes for CRUD operations on tasks
 // Create task
 exports.addTask = async (req, res) => {
     try {
-      const { task_title, task_desc, stage, status, priority, assigned_to, project_id } = req.body;
-      const newTask = await TaskModel.createTask(task_title, task_desc, stage, status, priority, assigned_to, project_id);
+      const { task_title, task_desc, stage, status, priority, assigned_to, project_id, created_by } = req.body;
+      const newTask = await TaskModel.createTask(task_title, task_desc, stage, status, priority, assigned_to, project_id, created_by);
       res.json(newTask);
     } catch (err) {
       console.error(err.message);

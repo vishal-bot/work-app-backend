@@ -5,6 +5,7 @@ const TaskController = require('../controllers/taskController');
 
 router.get('/', TaskController.getAllTasks);
 router.get('/team/:teamId', TaskController.getTasksByTeam);
+router.get('/user/:teamId/:userId', TaskController.getTasksByUser);
 router.get('/new', TaskController.getNewTask);
 router.get('/:taskId', TaskController.getTask);
 router.post('/', TaskController.addTask);

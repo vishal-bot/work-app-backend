@@ -9,9 +9,15 @@ class TaskModel {
   }
 
   static async getTasksByTeam(teamId) {
-    const query = 'select * from tasks where project_id IN (select project_id from projects where team_id = $1) ORDER BY task_id DESC';
+    const query = 'SELECT tasks.* FROM tasks JOIN projects ON tasks.project_id = projects.project_id WHERE projects.team_id = $1 ORDER BY tasks.task_id DESC';
     const { rows } = await pool.query(query, [teamId]);
     return rows;
+  }
+
+  static async getTasksByUser(teamId, userId) {
+    const query = 'SELECT tasks.* FROM tasks JOIN projects ON tasks.project_id = projects.project_id WHERE projects.team_id = $1 AND (tasks.assigned_to IN ($2::text) OR tasks.created_by = $3) ORDER BY tasks.task_id DESC';
+    const { rows } = await pool.query(query, [teamId, userId, userId]);
+    return rows;  
   }
 
   static async getTask(taskId) {
@@ -30,9 +36,9 @@ class TaskModel {
     return rows;
   }
 
-  static async createTask(task_title, task_desc, stage, status, priority, assigned_to, project_id) {
+  static async createTask(task_title, task_desc, stage, status, priority, assigned_to, project_id, created_by) {
     try {
-      const { rows } = await pool.query('INSERT INTO tasks (task_title, task_desc, stage, status, priority, assigned_to, project_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [task_title, task_desc, stage, status, priority, assigned_to, project_id]);
+      const { rows } = await pool.query('INSERT INTO tasks (task_title, task_desc, stage, status, priority, assigned_to, project_id,created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *', [task_title, task_desc, stage, status, priority, assigned_to, project_id, created_by]);
       return rows[0];
     } catch (error) {
       throw new Error('Error creating task');
